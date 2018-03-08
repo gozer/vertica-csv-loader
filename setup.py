@@ -5,6 +5,7 @@ setup(
     version='0.1.0',
     packages=['vertica_loader'],
     python_requires='>=3.4',
+    data_files = [('vertica_loader/configs',['configs/salesforce-loads.yaml'])],
     install_requires=[
         'click',
         'pyodbc',
