@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='vertica-csv-loader',
     version='0.1.0',
-    py_modules=['vertica-csv-loader'],
+    packages=['vertica_loader'],
     python_requires='>=3.4',
     install_requires=[
         'click',
