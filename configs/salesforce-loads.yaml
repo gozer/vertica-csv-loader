@@ -1,0 +1,10 @@
+file_spec:
+  delimiter: ","
+  quoted: True
+  skip_header: True
+
+tables:
+  sf_donations: "/mnt/metrics-logger1/logs/salesforce/contact_donor_count/{date}/output.csv"
+  sf_foundation_signups: "/mnt/metrics-logger1/logs/salesforce/foundation_signups/{date}/output.csv"
+  sf_donation_count: "/mnt/metrics-logger1/logs/salesforce/donation_record_count/{date}/output.csv"
+  sf_copyright_petition: "/mnt/metrics-logger1/logs/salesforce/petition_signups/{date}/output.csv"
