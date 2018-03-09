@@ -8,3 +8,4 @@ tables:
   sf_foundation_signups: "/var/salesforce-fetcher/foundation_signups/{date}/output.csv"
   sf_donation_count: "/var/salesforce-fetcher/donation_record_count/{date}/output.csv"
   sf_copyright_petition: "/var/salesforce-fetcher/petition_signups/{date}/output.csv"
+  sf_contacts: "/var/salesforce-fetcher/contacts/{date}/output.csv"
