@@ -67,7 +67,30 @@ def load_table_configs(config_file, dates):
     file_spec = FileSpec(**settings['file_spec'])
 
     table_configs = []
-    for table, path in settings['tables'].items():
+    if type(settings['tables']) is list:
+      # new style config
+      for tbl in settings['tables']:
+        truncate = True
+        if 'truncate' in tbl:
+          truncate = tbl['truncate']
+        fields = None
+        if 'fields' in tbl:
+          fields = tbl['fields']
+        delete_before_insert = False
+        if 'delete_before_insert' in tbl:
+          delete_before_insert = tbl['delete_before_insert']
+        table_config = LoadConfig(table=tbl['name'],
+                                  path=tbl['path'],
+                                  file_spec=file_spec,
+                                  dates=dates,
+                                  truncate=truncate,
+                                  delete_before_insert=delete_before_insert,
+                                  fields=fields)
+        table_configs.append(table_config)
+
+    else:
+      # old style config
+      for table, path in settings['tables'].items():
         table_config = LoadConfig(table=table, path=path, file_spec=file_spec, dates=dates)
         table_configs.append(table_config)
 
@@ -99,13 +122,14 @@ class FileSpec(object):
 
 
 class LoadConfig(object):
-    def __init__(self, table, path, fields=None, file_spec=FileSpec(), truncate=True, dates=[]):
+    def __init__(self, table, path, fields=None, file_spec=FileSpec(), truncate=True, dates=[], delete_before_insert=False):
         self.table = table
         self.path = path
         self.fields = fields
         self.file_spec = file_spec
         self.truncate = truncate
         self.dates = dates
+        self.delete_before_insert = delete_before_insert
 
     def generate_sql(self):
         """
@@ -124,9 +148,14 @@ class LoadConfig(object):
             if not os.path.exists(data_file):
                 raise Exception("Path %s does not exists, %s table cannot be loaded" % (data_file, self.table))
 
+            # if this is set, delete everything from the table with a matching path (ie- filename and date)
+            if self.delete_before_insert:
+              del_sql = "DELETE FROM %s WHERE source_file='%s';" % (self.table, data_file)
+              statements.append(del_sql)
+
             table_fields = self.table
             if self.fields is not None:
-                table_fields += "(%s)" % self.fields
+                table_fields += "(%s)" % self.fields.format(path=data_file)
 
             file_stmt = self.file_spec.formatted_statement()
             copy_sql = "COPY %s FROM LOCAL '%s' %s;" % (table_fields, data_file, file_stmt)
