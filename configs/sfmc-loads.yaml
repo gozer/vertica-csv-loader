@@ -1,0 +1,50 @@
+file_spec:
+  delimiter: ","
+  quoted: False
+  skip_header: True
+
+tables:
+  - name: sfmc_events
+    path: "/var/sfmc-fetcher/{date}/Clicks.csv"
+    truncate: False
+    delete_before_insert: True
+    fields: >
+        client_id FILLER VARCHAR(1), send_id, subscriber_key FILLER VARCHAR(1),
+        email_address FILLER VARCHAR(1), subscriber_id, list_id, event_date,
+        event_type, send_url_id, url_id, url, alias, batch_id,
+        triggered_send_external_key, source_file AS '{path}'
+  - name: sfmc_events
+    path: "/var/sfmc-fetcher/{date}/Opens.csv"
+    truncate: False
+    delete_before_insert: True
+    fields: >
+        client_id FILLER VARCHAR(1), send_id, subscriber_key FILLER VARCHAR(1),
+        email_address FILLER VARCHAR(1), subscriber_id, list_id, event_date,
+        event_type, send_url_id AS NULL, url_id AS NULL, url AS '', alias AS '',
+        batch_id, triggered_send_external_key, source_file AS '{path}'
+  - name: sfmc_events
+    path: "/var/sfmc-fetcher/{date}/Sent.csv"
+    truncate: False
+    delete_before_insert: True
+    fields: >
+        client_id FILLER VARCHAR(1), send_id, subscriber_key FILLER VARCHAR(1),
+        email_address FILLER VARCHAR(1), subscriber_id, list_id, event_date,
+        event_type, send_url_id AS NULL, url_id AS NULL, url AS '', alias AS '',
+        batch_id, triggered_send_external_key, source_file AS '{path}'
+  - name: sfmc_send_jobs
+    path: "/var/sfmc-fetcher/{date}/SendJobs.csv"
+    truncate: False
+    delete_before_insert: True
+    fields: >
+        client_id FILLER VARCHAR(1), send_id, from_name, from_email, sched_time,
+        sent_time, subject, email_name, triggered_send_external_key,
+        send_definition_external_key, job_status, preview_url, is_multipart,
+        additional, source_file AS '{path}'
+  - name: sfmc_subscribers
+    path: "/var/sfmc-fetcher/{date}/Subscribers.csv"
+    truncate: False
+    delete_before_insert: True
+    fields: >
+        client_id FILLER VARCHAR(1), subscriber_key FILLER VARCHAR(1),
+        email_address FILLER VARCHAR(1), subscriber_id, status, date_held,
+        date_created, date_unsubscribed, source_file AS '{path}'
