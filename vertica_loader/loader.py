@@ -149,9 +149,18 @@ class LoadConfig(object):
                 raise Exception("Path %s does not exists, %s table cannot be loaded" % (data_file, self.table))
 
             # if this is set, delete everything from the table with a matching path (ie- filename and date)
-            if self.delete_before_insert:
+            if type(self.delete_before_insert) is bool:
               del_sql = "DELETE FROM %s WHERE source_file='%s';" % (self.table, data_file)
               statements.append(del_sql)
+            elif type(self.delete_before_insert) is dict:
+              # FIXME: find a better way to do this:
+              if not re.search('[^a-z_A-Z0-9]', self.delete_before_insert['field']) and \
+                 not re.search('\'', self.delete_before_insert['value']):
+                del_sql = "DELETE FROM %s WHERE %s='%s';" % \
+                    (self.table,
+                     self.delete_before_insert['field'],
+                     self.delete_before_insert['value'].format(date=day))
+                statements.append(del_sql)
 
             table_fields = self.table
             if self.fields is not None:
