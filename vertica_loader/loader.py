@@ -2,6 +2,7 @@
 
 import logging
 import os
+import re
 from datetime import date, timedelta, datetime
 
 import click
@@ -36,7 +37,7 @@ def run(config_file, start_date, end_date, date_format, dsn, debug):
         for stmt in statements:
             logger.debug(stmt)
             cursor.execute(stmt)
-            logger.info("Coppied %s rows" % cursor.rowcount)
+            logger.info("Copied %s rows" % cursor.rowcount)
 
     logger.info("Load completed")
 
@@ -164,7 +165,7 @@ class LoadConfig(object):
 
             table_fields = self.table
             if self.fields is not None:
-                table_fields += "(%s)" % self.fields.format(path=data_file)
+                table_fields += "(%s)" % self.fields.format(path=data_file,date=day)
 
             file_stmt = self.file_spec.formatted_statement()
             copy_sql = "COPY %s FROM LOCAL '%s' %s;" % (table_fields, data_file, file_stmt)
