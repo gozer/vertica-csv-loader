@@ -2,6 +2,7 @@
 
 import logging
 import os
+import re
 from datetime import date, timedelta, datetime
 
 import click
