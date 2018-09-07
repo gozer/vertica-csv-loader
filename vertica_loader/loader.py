@@ -37,7 +37,7 @@ def run(config_file, start_date, end_date, date_format, dsn, debug):
         for stmt in statements:
             logger.debug(stmt)
             cursor.execute(stmt)
-            logger.info("Coppied %s rows" % cursor.rowcount)
+            logger.info("Copied %s rows" % cursor.rowcount)
 
     logger.info("Load completed")
 
