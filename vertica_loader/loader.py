@@ -164,7 +164,7 @@ class LoadConfig(object):
 
             table_fields = self.table
             if self.fields is not None:
-                table_fields += "(%s)" % self.fields.format(path=data_file)
+                table_fields += "(%s)" % self.fields.format(path=data_file,date=day)
 
             file_stmt = self.file_spec.formatted_statement()
             copy_sql = "COPY %s FROM LOCAL '%s' %s;" % (table_fields, data_file, file_stmt)
