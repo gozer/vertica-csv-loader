@@ -119,6 +119,7 @@ class FileSpec(object):
             stmt += " SKIP 1"
 
         stmt += " DIRECT"
+        stmt += " EXCEPTIONS '/var/log/vertica-csv-loader/exceptions-{source_file}.txt' REJECTED DATA '/var/log/vertica-csv-loader/rejected-{source_file}.txt'"
         return stmt
 
 
@@ -169,6 +170,13 @@ class LoadConfig(object):
 
             file_stmt = self.file_spec.formatted_statement()
             copy_sql = "COPY %s FROM LOCAL '%s' %s;" % (table_fields, data_file, file_stmt)
+
+            if data_file:
+              source_filename = os.path.basename(data_file)
+              copy_sql = copy_sql.format(source_file=source_filename)
+            else:
+              copy_sql = copy_sql.format(source_file='no_filename')
+
             statements.append(copy_sql)
 
             commit_sql = "INSERT INTO last_updated (name, updated_at, updated_by) "  \
