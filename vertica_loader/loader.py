@@ -119,7 +119,7 @@ class FileSpec(object):
             stmt += " SKIP 1"
 
         stmt += " DIRECT"
-        stmt += " EXCEPTIONS '/var/log/vertica-csv-loader/exceptions-{source_file}.txt' REJECTED DATA '/var/log/vertica-csv-loader/rejected-{source_file}.txt'"
+        stmt += " EXCEPTIONS '/var/log/vertica-csv-loader/exceptions-{source_file}.log' REJECTED DATA '/var/log/vertica-csv-loader/rejected-{source_file}.log'"
         return stmt
 
 
